@@ -160,9 +160,7 @@ namespace SJImobiliaria
 
         public void alugarImovel(Movimentacao movimentacao)
         {
-            Movimentacao movimentacao = new Movimentacao();
-            Console.WriteLine("Informe o ID imóvel que deseja alugar: ");
-            movimentacao.idImovel = Convert.ToInt32(Console.ReadLine());
+
 
         }
 
