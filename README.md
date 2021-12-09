@@ -347,7 +347,6 @@ namespace SJImobiliaria
                 {
                     break;
                 }
-
                 lerOpcaoMenuPrincipal();
             }
         }
