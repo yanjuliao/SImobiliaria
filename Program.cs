@@ -37,6 +37,7 @@ namespace SJImobiliaria
         int idImovel;
         int idCliente;
         string situacao;
+
     }
 
     class Imobiliaria
@@ -159,7 +160,10 @@ namespace SJImobiliaria
 
         public void alugarImovel(Movimentacao movimentacao)
         {
-            
+            Movimentacao movimentacao = new Movimentacao();
+            Console.WriteLine("Informe o ID imóvel que deseja alugar: ");
+            movimentacao.idImovel = Convert.ToInt32(Console.ReadLine());
+
         }
 
         public void finalizarLocacao(Movimentacao movimentacao)
