@@ -50,13 +50,20 @@ namespace SJImobiliaria
             string txtLido = "1";
             while (txtLido == "1")
             {
-                Console.WriteLine("Digite 1 para casa ou pressione outra tecla para apartamento.");
+                Console.WriteLine("Digite 1 para casa ou pressione ou 2 para apartamento.");
                 txtLido = Console.ReadLine();
+
+                while (txtLido != "1" && txtLido != "2")
+                {
+                    Console.WriteLine("Ops... parece que você digitou outro valor, tente novamente!!!!");
+                    Console.WriteLine("Digite 1 para casa ou pressione ou 2 para apartamento.");
+                    txtLido = Console.ReadLine();
+                }
 
                 if (txtLido == "1")
                 {
                     Casa imovel = new Casa();
-                    Console.WriteLine("Informe a descrição do casa, Ex: Casa, 3 quartos.");
+                    Console.WriteLine("Informe a descrição da casa, Ex: Casa, 3 quartos.");
                     imovel.descricao = Console.ReadLine();
 
                     Console.WriteLine("Informe a metragem da área externa em m².");
@@ -67,7 +74,7 @@ namespace SJImobiliaria
 
                     imoveis.Add(imovel);
                 }
-                else
+                else if (txtLido == "2")
                 {
                     Apartamento imovel = new Apartamento();
                     Console.WriteLine("Informe a descrição do apartamento, Ex: Apartamento, 3 quartos.");
@@ -82,8 +89,15 @@ namespace SJImobiliaria
                     imoveis.Add(imovel);
                 }
 
-                Console.WriteLine("Digite 1 para continuar o cadastro ou qualquer outra tecla para ecerrar o cadasrto");
+                Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para ecerrar o cadasrto");
                 txtLido = Console.ReadLine();
+
+                while (txtLido != "1" && txtLido != "2")
+                {
+                    Console.WriteLine("Ops... parece que você digitou outro valor, tente novamente!!!!");
+                    Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para ecerrar o cadasrto");
+                    txtLido = Console.ReadLine();
+                }
             }
         }
 
@@ -99,8 +113,15 @@ namespace SJImobiliaria
 
                 clientes.Add(cliente);
 
-                Console.WriteLine("Digite 1 para continuar o cadastro ou qualquer outra tecla para ecerrar o cadastro");
+                Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para ecerrar o cadastro");
                 txtLido = Console.ReadLine();
+
+                while (txtLido != "1" && txtLido != "0")
+                {
+                    Console.WriteLine("Ops... parece que você digitou outro valor, tente novamente!!!!");
+                    Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para ecerrar o cadasrto");
+                    txtLido = Console.ReadLine();
+                }
             }
         }
 
@@ -109,9 +130,16 @@ namespace SJImobiliaria
             Console.WriteLine("Id | Descricao | Situacao");
 
             foreach (Imovel imovel in imoveis)
-            {                
+            {
+                Console.WriteLine("-------------------------------------------");
+                Console.WriteLine("-------------------------------------------");
                 Console.WriteLine(imovel.id.ToString() + " | " + imovel.descricao + " | " + imovel.situacao);
             }
+
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Informe qualquer tecla para retornar ao MENU PRINCIPAL!");
+            Console.ReadLine();
         }
 
         public void listarClientes()
@@ -122,6 +150,11 @@ namespace SJImobiliaria
             {
                 Console.WriteLine(cliente.id.ToString() + " | " + cliente.nome);
             }
+
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Informe qualquer tecla para retornar ao MENU PRINCIPAL!");
+            Console.ReadLine();
         }
 
         public void alugarImovel(Movimentacao movimentacao)
@@ -146,13 +179,19 @@ namespace SJImobiliaria
 
         static void lerOpcaoMenuPrincipal()
         {
-            Console.WriteLine("Digite 0 para cadastrar imóvel ");
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Digite 0 para cadastrar imóvel ");           
             Console.WriteLine("Digite 1 para cadastrar cliente ");
+            Console.WriteLine("-------------------------------------------");
             Console.WriteLine("Digite 2 para listar os imóveis ");
             Console.WriteLine("Digite 3 para listar os clientes ");
+            Console.WriteLine("------------------------------------------");
             Console.WriteLine("Digite 4 para locação.");
             Console.WriteLine("Digite 5 para finalizar locação.");
+            Console.WriteLine("------------------------------------------");
             Console.WriteLine("Digite 6 para vendas.");
+            Console.WriteLine("------------------------------------------");
             Console.WriteLine("Digite outra tecla para sair.");
             txtLido = Console.ReadLine();
         }
