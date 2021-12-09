@@ -100,7 +100,7 @@ class Imovel
         }
     }
 }
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Relatório 09/12
 
 Modifiquei basicamente toda a estrutura do sistema, troquei a classe morador por pessoa e cliente que herda de pessoa, criei também um menu na main como parte principal do código e comecei a implementar os métodos.
