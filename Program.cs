@@ -145,6 +145,8 @@ namespace SJImobiliaria
 
             foreach (Cliente cliente in clientes)
             {
+                Console.WriteLine("-------------------------------------------");
+                Console.WriteLine("-------------------------------------------");
                 Console.WriteLine(cliente.id.ToString() + " | " + cliente.nome);
             }
 
@@ -152,7 +154,7 @@ namespace SJImobiliaria
 
         public void alugarImovel(Movimentacao movimentacao)
         {
-                   
+           
         }
 
         public void finalizarLocacao(Movimentacao movimentacao)
