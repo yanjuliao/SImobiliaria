@@ -93,7 +93,7 @@ namespace SJImobiliaria
                 Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para ecerrar o cadasrto");
                 txtLido = Console.ReadLine();
 
-                while (txtLido != "1" && txtLido != "2")
+                while (txtLido != "1" && txtLido != "0")
                 {
                     Console.WriteLine("Ops... parece que você digitou outro valor, tente novamente!!!!");
                     Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para ecerrar o cadasrto");
@@ -126,7 +126,7 @@ namespace SJImobiliaria
             }
         }
 
-        public void listarImoveis(string situacao = "")
+        public void listarImoveis()
         {
             Console.WriteLine("Id | Descricao | Situacao");
 
@@ -136,11 +136,7 @@ namespace SJImobiliaria
                 Console.WriteLine("-------------------------------------------");
                 Console.WriteLine(imovel.id.ToString() + " | " + imovel.descricao + " | " + imovel.situacao);
             }
-
-            Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("Informe qualquer tecla para retornar ao MENU PRINCIPAL!");
-            Console.ReadLine();
+       
         }
 
         public void listarClientes()
@@ -152,16 +148,11 @@ namespace SJImobiliaria
                 Console.WriteLine(cliente.id.ToString() + " | " + cliente.nome);
             }
 
-            Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("Informe qualquer tecla para retornar ao MENU PRINCIPAL!");
-            Console.ReadLine();
         }
 
         public void alugarImovel(Movimentacao movimentacao)
         {
-
-
+                   
         }
 
         public void finalizarLocacao(Movimentacao movimentacao)
@@ -198,6 +189,14 @@ namespace SJImobiliaria
             txtLido = Console.ReadLine();
         }
 
+        static void retornarMenuPrincipal()
+        {
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Informe qualquer tecla para retornar ao MENU PRINCIPAL!");
+            Console.ReadLine();
+        }
+
         static void Main(string[] args)
         {
             lerOpcaoMenuPrincipal();
@@ -217,10 +216,12 @@ namespace SJImobiliaria
                 else if (txtLido == "2")
                 {
                     imobiliaria.listarImoveis();
+                    retornarMenuPrincipal();
                 }
                 else if (txtLido == "3")
                 {
                     imobiliaria.listarClientes();
+                    retornarMenuPrincipal();
                 }
                 else if (txtLido == "4")
                 {
