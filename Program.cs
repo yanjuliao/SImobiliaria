@@ -10,38 +10,126 @@ namespace SJImobiliaria
 
     class Imovel
     {
-        public int id;
-        public string descricao;
-        public string situacao;
+        int id;
+        string descricao;
+        string situacao;
+
+        public Imovel(int id, string descricao, string situacao)
+        {
+            this.id = id;
+            this.descricao = descricao;
+            this.situacao = situacao;
+        }
+
+        public int getId()
+        {
+            return this.id;
+        }
+
+        public string getDescricao()
+        {
+            return this.descricao;
+        }
+
+        public string getSituacao()
+        {
+            return this.situacao;
+        }
+
+        public void setSituacao(string situacao)
+        {
+            if ((situacao == "Disponivel") || (situacao == "Alugado") || (situacao == "Vendido"))
+                this.situacao = situacao;
+            else
+                throw new EAbort("A situação é inválida ou não foi informada");
+        }
     }
 
     class Apartamento : Imovel
     {
-        public int andar;
+        int andar;
+        public Apartamento(int id, string descricao, string situacao, int andar) : base(id, descricao, situacao) { }
+
+        public int getAndar()
+        {
+            return this.andar;
+        }
+
     }
 
     class Casa : Imovel
     {
-        public double medidaAreaExterna;
+        double medidaAreaExterna;
+
+        public Casa(int id, string descricao, string situacao, double medidaAreaExterna) : base(id, descricao, situacao) { }
+
+        public double getMedidaAreaExterna()
+        {
+            return this.medidaAreaExterna;
+        }
     }
 
     class Pessoa
     {
-       public int id;
-       public string nome;
+       int id;
+       string nome;
+
+       public Pessoa(int id, string nome)
+       {
+            this.id = id;
+            this.nome = nome;
+       }
+
+       public int getId()
+       {
+           return this.id;
+       }
+
+       public string getNome()
+       {
+           return this.nome;
+       }
     }
 
     class Cliente : Pessoa
     {
-        public string numeroContrato;
+        public Cliente(int id, string nome): base (id, nome) { }
     }
 
     class Movimentacao
     {
-        public int id;
-        public int idImovel;
-        public int idCliente;
-        public string situacao;
+        int id;
+        int idImovel;
+        int idCliente;
+        string situacao;
+
+        public Movimentacao(int id, int idImovel, int idCliente, string situacao)
+        {
+            this.id = id;
+            this.idImovel = idImovel;
+            this.idCliente = idCliente;
+            this.situacao = situacao;
+        }
+
+        public int getId()
+        {
+            return this.id;
+        }
+
+        public int getIdImovel()
+        {
+            return this.idImovel;
+        }
+
+        public int getIdCliente()
+        {
+            return this.idCliente;
+        }
+
+        public string getSituacao()
+        {
+            return this.situacao;
+        }
     }
 
     class Imobiliaria
@@ -54,7 +142,7 @@ namespace SJImobiliaria
         {            
             foreach (Imovel imovel in imoveis)
             {                
-                if (imovel.id == id)
+                if (imovel.getId() == id)
                 {
                     return imovel;
                 }
@@ -66,12 +154,27 @@ namespace SJImobiliaria
         {
             foreach (Cliente cliente in clientes)
             {
-                if (cliente.id == id)
+                if (cliente.getId() == id)
                 {
                     return cliente;
                 }
             }
             return null;
+        }
+
+        public Movimentacao getUltimaMovimentacaoByImovel(int id)
+        {
+            Movimentacao ultimaMovimentacao = null;
+
+            foreach (Movimentacao movimentacao in movimentacoes)
+            {
+                if (movimentacao.getId() == id)
+                {
+                    ultimaMovimentacao = movimentacao;
+                }
+            }
+
+            return ultimaMovimentacao;
         }
 
         public void cadastrarImovel()
@@ -91,29 +194,31 @@ namespace SJImobiliaria
 
                 if (txtLido == "1")
                 {
-                    Casa imovel = new Casa();
                     Console.WriteLine("Informe a descrição da casa, Ex: Casa, 3 quartos.");
-                    imovel.descricao = Console.ReadLine();
+                    string descricao = Console.ReadLine();
 
                     Console.WriteLine("Informe a metragem da área externa em m².");
-                    imovel.medidaAreaExterna = Convert.ToDouble(Console.ReadLine());
+                    double medidaAreaExterna = Convert.ToDouble(Console.ReadLine());
 
-                    imovel.situacao = "Disponivel";
-                    imovel.id = imoveis.Count + 1;
+                    string situacao = "Disponivel";
+                    int id = imoveis.Count + 1;
+
+                    Casa imovel = new Casa(id, descricao, situacao, medidaAreaExterna);
 
                     imoveis.Add(imovel);
                 }
                 else if (txtLido == "2")
                 {
-                    Apartamento imovel = new Apartamento();
                     Console.WriteLine("Informe a descrição do apartamento, Ex: Apartamento, 3 quartos.");
-                    imovel.descricao = Console.ReadLine();
+                    string descricao = Console.ReadLine();
 
                     Console.WriteLine("Informe o andar do apartamento.");
-                    imovel.andar = Convert.ToInt32(Console.ReadLine());
+                    int andar = Convert.ToInt32(Console.ReadLine());
 
-                    imovel.situacao = "Disponivel";
-                    imovel.id = imoveis.Count + 1;
+                    string situacao = "Disponivel";
+                    int id = imoveis.Count + 1;
+
+                    Apartamento imovel = new Apartamento(id, descricao, situacao, andar);
 
                     imoveis.Add(imovel);
                 }
@@ -134,11 +239,11 @@ namespace SJImobiliaria
         {
             string txtLido = "1";
             while (txtLido == "1")
-            { 
-                Cliente cliente = new Cliente();
+            {                
                 Console.WriteLine("Informe o nome do cliente");
-                cliente.nome = Console.ReadLine();
-                cliente.id = clientes.Count + 1;
+                string nome = Console.ReadLine();
+                int id = clientes.Count + 1;
+                Cliente cliente = new Cliente(id, nome);
 
                 clientes.Add(cliente);
 
@@ -160,10 +265,10 @@ namespace SJImobiliaria
 
             foreach (Imovel imovel in imoveis)
             {
-                if((imovel.situacao == situacao) || (situacao == "")) { 
+                if((imovel.getSituacao() == situacao) || (situacao == "")) { 
                     Console.WriteLine("-------------------------------------------");
                     Console.WriteLine("-------------------------------------------");
-                    Console.WriteLine(imovel.id.ToString() + " | " + imovel.descricao + " | " + imovel.situacao);
+                    Console.WriteLine(imovel.getId().ToString() + " | " + imovel.getDescricao() + " | " + imovel.getSituacao());
                 }
             }
        
@@ -177,7 +282,7 @@ namespace SJImobiliaria
             {
                 Console.WriteLine("-------------------------------------------");
                 Console.WriteLine("-------------------------------------------");
-                Console.WriteLine(cliente.id.ToString() + " | " + cliente.nome);
+                Console.WriteLine(cliente.getId().ToString() + " | " + cliente.getNome());
             }
 
         }
@@ -197,7 +302,7 @@ namespace SJImobiliaria
                 throw new EAbort("O imóvel não foi localizado!");
             }
 
-            if(imovel.situacao != "Disponivel")
+            if(imovel.getSituacao() != "Disponivel")
             {
                 throw new EAbort("O imóvel não está disponível!");
             }
@@ -210,30 +315,97 @@ namespace SJImobiliaria
 
             if (cliente == null)
             {
-                throw new Exception("O clientel não foi localizado!");
+                throw new EAbort("O clientel não foi localizado!");
             }
 
-            Movimentacao movimentacao = new Movimentacao();
-            movimentacao.id = this.movimentacoes.Count + 1;
-            movimentacao.idImovel = imovel.id;
-            movimentacao.idCliente = cliente.id;
-            movimentacao.situacao = "Aluguel";
+            Movimentacao movimentacao = new Movimentacao(this.movimentacoes.Count + 1, imovel.getId(), cliente.getId(), "Aluguel");
 
             this.movimentacoes.Add(movimentacao);
 
-            imovel.situacao = "Alugado";
+            imovel.setSituacao("Alugado");
 
             Console.WriteLine("Locação realizada com sucesso!");
         }
 
         public void finalizarLocacao()
         {
+            int idLido;
 
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Digite o ID do imóvel que deseja finalizar a locação: ");
+            idLido = Convert.ToInt32(Console.ReadLine());
+
+            Imovel imovel = this.getImovelById(idLido);
+
+            if (imovel == null)
+            {
+                throw new EAbort("O imóvel não foi localizado!");
+            }
+
+            if (imovel.getSituacao() != "Alugado")
+            {
+                throw new EAbort("O imóvel não está alugado!");
+            }
+
+            Movimentacao ultimaMovimentacao = this.getUltimaMovimentacaoByImovel(imovel.getId());
+
+            if (ultimaMovimentacao == null)
+            {
+                throw new EAbort("A movimentação do imóvel não foi localizada!");
+            }
+
+            if (ultimaMovimentacao.getSituacao() != "Aluguel")
+            {
+                throw new EAbort("A última movimentação do imóvel não foi de locação.");
+            }
+
+            Movimentacao movimentacao = new Movimentacao(this.movimentacoes.Count + 1, imovel.getId(), ultimaMovimentacao.getIdCliente(), "Finalização da locação");
+
+            this.movimentacoes.Add(movimentacao);
+
+            imovel.setSituacao("Disponivel");
+
+            Console.WriteLine("Finalização da locação realizada com sucesso!");
         }
 
         public void venderImovel()
         {
+            int idLido;
 
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Digite o ID do imóvel que deseja vender: ");
+            idLido = Convert.ToInt32(Console.ReadLine());
+
+            Imovel imovel = this.getImovelById(idLido);
+
+            if (imovel == null)
+            {
+                throw new EAbort("O imóvel não foi localizado!");
+            }
+
+            if (imovel.getSituacao() != "Disponivel")
+            {
+                throw new EAbort("O imóvel não está disponível!");
+            }
+
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Digite o ID do cliente que está comprando este imóvel: ");
+            idLido = Convert.ToInt32(Console.ReadLine());
+
+            Cliente cliente = this.getClienteById(idLido);
+
+            if (cliente == null)
+            {
+                throw new EAbort("O clientel não foi localizado!");
+            }
+
+            Movimentacao movimentacao = new Movimentacao(this.movimentacoes.Count + 1, imovel.getId(), cliente.getId(), "Venda");
+
+            this.movimentacoes.Add(movimentacao);
+
+            imovel.setSituacao("Vendido");
+
+            Console.WriteLine("Venda realizada com sucesso!");
         }
     }
 
@@ -321,11 +493,11 @@ namespace SJImobiliaria
                     }
                     else if (txtLido == "8")
                     {
-
+                        imobiliaria.finalizarLocacao();
                     }
                     else if (txtLido == "9")
                     {
-
+                        imobiliaria.venderImovel();
                     }
                     else
                     {
