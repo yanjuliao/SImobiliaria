@@ -3,6 +3,11 @@ using System.Collections;
 
 namespace SJImobiliaria
 {
+
+    class EAbort : Exception { 
+        public EAbort(string message): base (message) { }
+    }
+
     class Imovel
     {
         public int id;
@@ -31,10 +36,43 @@ namespace SJImobiliaria
         public string numeroContrato;
     }
 
+    class Movimentacao
+    {
+        public int id;
+        public int idImovel;
+        public int idCliente;
+        public string situacao;
+    }
+
     class Imobiliaria
     {
         ArrayList clientes = new ArrayList();
         ArrayList imoveis = new ArrayList();
+        ArrayList movimentacoes = new ArrayList();
+
+         public Imovel getImovelById(int id)
+        {            
+            foreach (Imovel imovel in imoveis)
+            {                
+                if (imovel.id == id)
+                {
+                    return imovel;
+                }
+            }
+            return null;
+        }
+
+        public Cliente getClienteById(int id)
+        {
+            foreach (Cliente cliente in clientes)
+            {
+                if (cliente.id == id)
+                {
+                    return cliente;
+                }
+            }
+            return null;
+        }
 
         public void cadastrarImovel()
         {
@@ -60,7 +98,7 @@ namespace SJImobiliaria
                     Console.WriteLine("Informe a metragem da área externa em m².");
                     imovel.medidaAreaExterna = Convert.ToDouble(Console.ReadLine());
 
-                    imovel.situacao = "Disponível";
+                    imovel.situacao = "Disponivel";
                     imovel.id = imoveis.Count + 1;
 
                     imoveis.Add(imovel);
@@ -74,7 +112,7 @@ namespace SJImobiliaria
                     Console.WriteLine("Informe o andar do apartamento.");
                     imovel.andar = Convert.ToInt32(Console.ReadLine());
 
-                    imovel.situacao = "Disponível";
+                    imovel.situacao = "Disponivel";
                     imovel.id = imoveis.Count + 1;
 
                     imoveis.Add(imovel);
@@ -116,15 +154,17 @@ namespace SJImobiliaria
             }
         }
 
-        public void listarImoveis()
+        public void listarImoveis(String situacao = "")
         {
             Console.WriteLine("Id | Descricao | Situacao");
 
             foreach (Imovel imovel in imoveis)
             {
-                Console.WriteLine("-------------------------------------------");
-                Console.WriteLine("-------------------------------------------");
-                Console.WriteLine(imovel.id.ToString() + " | " + imovel.descricao + " | " + imovel.situacao);
+                if((imovel.situacao == situacao) || (situacao == "")) { 
+                    Console.WriteLine("-------------------------------------------");
+                    Console.WriteLine("-------------------------------------------");
+                    Console.WriteLine(imovel.id.ToString() + " | " + imovel.descricao + " | " + imovel.situacao);
+                }
             }
        
         }
@@ -144,30 +184,46 @@ namespace SJImobiliaria
 
         public void alugarImovel()
         {
-            int NumeroLido;
-            Console.WriteLine("Id | Descricao | Situacao");
+            int idLido;
 
-            foreach (Imovel imovel in imoveis)
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Digite o ID do imóvel que deseja locar: ");
+            idLido = Convert.ToInt32(Console.ReadLine());
+
+            Imovel imovel = this.getImovelById(idLido);
+
+            if (imovel == null)
             {
-                if (imovel.situacao == "Disponível")
-                {
-                    Console.WriteLine("-------------------------------------------");
-                    Console.WriteLine("-------------------------------------------");
-                    Console.WriteLine(imovel.id.ToString() + " | " + imovel.descricao + " | " + imovel.situacao);
-                }
+                throw new EAbort("O imóvel não foi localizado!");
             }
 
-            Console.WriteLine("Digite o id do imóvel que deseja locar: ");
-            NumeroLido = Convert.ToInt32(Console.ReadLine());
-            
-            foreach (Imovel imovel in imoveis)
+            if(imovel.situacao != "Disponivel")
             {
-                if (imovel.id == NumeroLido)
-                {
-                    imovel.situacao = "Alugado";
-                }
+                throw new EAbort("O imóvel não está disponível!");
             }
 
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Digite o ID do cliente que está locando este imóvel: ");
+            idLido = Convert.ToInt32(Console.ReadLine());
+
+            Cliente cliente = this.getClienteById(idLido);
+
+            if (cliente == null)
+            {
+                throw new Exception("O clientel não foi localizado!");
+            }
+
+            Movimentacao movimentacao = new Movimentacao();
+            movimentacao.id = this.movimentacoes.Count + 1;
+            movimentacao.idImovel = imovel.id;
+            movimentacao.idCliente = cliente.id;
+            movimentacao.situacao = "Aluguel";
+
+            this.movimentacoes.Add(movimentacao);
+
+            imovel.situacao = "Alugado";
+
+            Console.WriteLine("Locação realizada com sucesso!");
         }
 
         public void finalizarLocacao()
@@ -192,13 +248,16 @@ namespace SJImobiliaria
             Console.WriteLine("Digite 0 para cadastrar imóvel ");           
             Console.WriteLine("Digite 1 para cadastrar cliente ");
             Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("Digite 2 para listar os imóveis ");
-            Console.WriteLine("Digite 3 para listar os clientes ");
+            Console.WriteLine("Digite 2 para listar todos os imóveis ");
+            Console.WriteLine("Digite 3 para listar os imóveis disponíves");
+            Console.WriteLine("Digite 4 para listar os imóveis alugados");
+            Console.WriteLine("Digite 5 para listar os imóveis vendidos");
+            Console.WriteLine("Digite 6 para listar os clientes ");
             Console.WriteLine("------------------------------------------");
-            Console.WriteLine("Digite 4 para locação.");
-            Console.WriteLine("Digite 5 para finalizar locação.");
+            Console.WriteLine("Digite 7 para locação.");
+            Console.WriteLine("Digite 8 para finalizar locação.");
             Console.WriteLine("------------------------------------------");
-            Console.WriteLine("Digite 6 para vendas.");
+            Console.WriteLine("Digite 9 para vendas.");
             Console.WriteLine("------------------------------------------");
             Console.WriteLine("Digite outra tecla para sair.");
             txtLido = Console.ReadLine();
@@ -220,40 +279,68 @@ namespace SJImobiliaria
 
             while (txtLido != "")
             {
-                if (txtLido == "0")
+                try
                 {
-                    imobiliaria.cadastrarImovel();
-                }
-                else if (txtLido == "1")
-                {
-                    imobiliaria.cadastrarCliente();
-                }
-                else if (txtLido == "2")
-                {
-                    imobiliaria.listarImoveis();
-                    retornarMenuPrincipal();
-                }
-                else if (txtLido == "3")
-                {
-                    imobiliaria.listarClientes();
-                    retornarMenuPrincipal();
-                }
-                else if (txtLido == "4")
-                {
-                    imobiliaria.alugarImovel();
-                    retornarMenuPrincipal();
-                }
-                else if (txtLido == "5")
-                {
+                    if (txtLido == "0")
+                    {
+                        imobiliaria.cadastrarImovel();
+                    }
+                    else if (txtLido == "1")
+                    {
+                        imobiliaria.cadastrarCliente();
+                    }
+                    else if (txtLido == "2")
+                    {
+                        imobiliaria.listarImoveis();
+                        retornarMenuPrincipal();
+                    }
+                    else if (txtLido == "3")
+                    {
+                        imobiliaria.listarImoveis("Disponivel");
+                        retornarMenuPrincipal();
+                    }
+                    else if (txtLido == "4")
+                    {
+                        imobiliaria.listarImoveis("Alugado");
+                        retornarMenuPrincipal();
+                    }
+                    else if (txtLido == "5")
+                    {
+                        imobiliaria.listarImoveis("Vendido");
+                        retornarMenuPrincipal();
+                    }
+                    else if (txtLido == "6")
+                    {
+                        imobiliaria.listarClientes();
+                        retornarMenuPrincipal();
+                    }
+                    else if (txtLido == "7")
+                    {
+                        imobiliaria.alugarImovel();
+                        retornarMenuPrincipal();
+                    }
+                    else if (txtLido == "8")
+                    {
 
-                }
-                else if (txtLido == "6")
-                {
+                    }
+                    else if (txtLido == "9")
+                    {
 
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-                else
+                catch (Exception erro)
                 {
-                    break;
+                    if(erro is EAbort)
+                    {
+                        Console.WriteLine("Operação abortada. Descrição: " + erro.Message);
+                    } else
+                    {
+                        Console.WriteLine("Ocorreu um erro inesperado. Descrição: " + erro.Message);
+                    }
                 }
 
                 lerOpcaoMenuPrincipal();
