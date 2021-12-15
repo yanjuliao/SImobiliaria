@@ -31,20 +31,10 @@ namespace SJImobiliaria
         public string numeroContrato;
     }
 
-    class Movimentacao
-    {
-        int id;
-        int idImovel;
-        int idCliente;
-        string situacao;
-
-    }
-
     class Imobiliaria
     {
         ArrayList clientes = new ArrayList();
         ArrayList imoveis = new ArrayList();
-        ArrayList movimentacoes = new ArrayList();
 
         public void cadastrarImovel()
         {
@@ -152,17 +142,40 @@ namespace SJImobiliaria
 
         }
 
-        public void alugarImovel(Movimentacao movimentacao)
+        public void alugarImovel()
         {
-           
+            int NumeroLido;
+            Console.WriteLine("Id | Descricao | Situacao");
+
+            foreach (Imovel imovel in imoveis)
+            {
+                if (imovel.situacao == "Disponível")
+                {
+                    Console.WriteLine("-------------------------------------------");
+                    Console.WriteLine("-------------------------------------------");
+                    Console.WriteLine(imovel.id.ToString() + " | " + imovel.descricao + " | " + imovel.situacao);
+                }
+            }
+
+            Console.WriteLine("Digite o id do imóvel que deseja locar: ");
+            NumeroLido = Convert.ToInt32(Console.ReadLine());
+            
+            foreach (Imovel imovel in imoveis)
+            {
+                if (imovel.id == NumeroLido)
+                {
+                    imovel.situacao = "Alugado";
+                }
+            }
+
         }
 
-        public void finalizarLocacao(Movimentacao movimentacao)
+        public void finalizarLocacao()
         {
 
         }
 
-        public void venderImovel(Movimentacao movimentacao)
+        public void venderImovel()
         {
 
         }
@@ -227,7 +240,8 @@ namespace SJImobiliaria
                 }
                 else if (txtLido == "4")
                 {
-
+                    imobiliaria.alugarImovel();
+                    retornarMenuPrincipal();
                 }
                 else if (txtLido == "5")
                 {
