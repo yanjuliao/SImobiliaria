@@ -165,17 +165,27 @@ namespace SJImobiliaria
 
         public void listarImoveis(String situacao = "")
         {
-            //to-do: colocar para exibir os dados da casa e do apartamento que não estão sendo listados
-
+            Console.WriteLine("-------------------------------------------");
             Console.WriteLine("Id | Descricao | Situacao | Medida Area Externa | Andar");
 
             foreach (Imovel imovel in imoveis)
             {
                 if ((imovel.getSituacao() == situacao) || (situacao == ""))
-                {                 
-                    Console.WriteLine("-------------------------------------------");
-                    Console.WriteLine("-------------------------------------------");
-                    Console.WriteLine(imovel.getId().ToString() + " | " + imovel.getDescricao() + " | " + imovel.getSituacao() + " | ");
+                {
+                    if (imovel is Casa)
+                    {
+                        Casa casa = imovel as Casa;
+                        Console.WriteLine("-------------------------------------------");
+                        Console.WriteLine("-------------------------------------------");
+                        Console.WriteLine(casa.getId().ToString() + " | " + casa.getDescricao() + " | " + casa.getSituacao() + " | " +  casa.getMedidaAreaExterna() + " | " + "" + " | ");
+                    }
+                    else if (imovel is Apartamento)
+                    {
+                        Apartamento apartamento = imovel as Apartamento;
+                        Console.WriteLine("-------------------------------------------");
+                        Console.WriteLine("-------------------------------------------");
+                        Console.WriteLine(apartamento.getId().ToString() + " | " + apartamento.getDescricao() + " | " + apartamento.getSituacao() + " | " + "" + " | " + apartamento.getAndar() + " | ");
+                    }
                 }
             }
 
@@ -183,15 +193,14 @@ namespace SJImobiliaria
 
         public void listarClientes()
         {
-            //to-do: listar o número do contrato
-
+            Console.WriteLine("-------------------------------------------");
             Console.WriteLine("Id | Nome | Número Contrato");
 
             foreach (Cliente cliente in clientes)
             {
                 Console.WriteLine("-------------------------------------------");
                 Console.WriteLine("-------------------------------------------");
-                Console.WriteLine(cliente.getId().ToString() + " | " + cliente.getNome() + "|" + cliente.getNumeroContrato());
+                Console.WriteLine(cliente.getId().ToString() + " | " + cliente.getNome() + " | " + cliente.getNumeroContrato());
             }
 
         }

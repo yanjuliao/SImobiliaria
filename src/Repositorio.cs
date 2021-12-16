@@ -45,15 +45,21 @@ namespace SJImobiliaria
 
         public static Imobiliaria getImobiliaria()
         {
+            Imobiliaria imobiliaria = null;
+
             Repositorio.inicializarLeitores();
+            try
+            {
+                ArrayList clientes = Repositorio.getClientes();
+                ArrayList imoveis = Repositorio.getImoveis();
+                ArrayList movimentacoes = Repositorio.getMovimentacoes();
 
-            ArrayList clientes = Repositorio.getClientes();
-            ArrayList imoveis = Repositorio.getImoveis();
-            ArrayList movimentacoes = Repositorio.getMovimentacoes();
-
-            Imobiliaria imobiliaria = new Imobiliaria(clientes, imoveis, movimentacoes);
-
-            Repositorio.finalizarLeitores();
+                imobiliaria = new Imobiliaria(clientes, imoveis, movimentacoes);
+            }
+            finally
+            {
+                Repositorio.finalizarLeitores();
+            }
 
             return imobiliaria;
         }
