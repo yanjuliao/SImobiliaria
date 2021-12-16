@@ -1,11 +1,13 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 
 namespace SJImobiliaria
 {
 
-    class EAbort : Exception { 
-        public EAbort(string message): base (message) { }
+    class EAbort : Exception
+    {
+        public EAbort(string message) : base(message) { }
     }
 
     class Imovel
@@ -48,7 +50,11 @@ namespace SJImobiliaria
     class Apartamento : Imovel
     {
         int andar;
-        public Apartamento(int id, string descricao, string situacao, int andar) : base(id, descricao, situacao) { }
+
+        public Apartamento(int id, string descricao, string situacao, int andar) : base(id, descricao, situacao)
+        {
+            this.andar = andar;
+        }
 
         public int getAndar()
         {
@@ -61,7 +67,10 @@ namespace SJImobiliaria
     {
         double medidaAreaExterna;
 
-        public Casa(int id, string descricao, string situacao, double medidaAreaExterna) : base(id, descricao, situacao) { }
+        public Casa(int id, string descricao, string situacao, double medidaAreaExterna) : base(id, descricao, situacao)
+        {
+            this.medidaAreaExterna = medidaAreaExterna;
+        }
 
         public double getMedidaAreaExterna()
         {
@@ -71,29 +80,32 @@ namespace SJImobiliaria
 
     class Pessoa
     {
-       int id;
-       string nome;
+        int id;
+        string nome;
 
-       public Pessoa(int id, string nome)
-       {
+        public Pessoa(int id, string nome)
+        {
             this.id = id;
             this.nome = nome;
-       }
+        }
 
-       public int getId()
-       {
-           return this.id;
-       }
+        public int getId()
+        {
+            return this.id;
+        }
 
-       public string getNome()
-       {
-           return this.nome;
-       }
+        public string getNome()
+        {
+            return this.nome;
+        }
     }
 
     class Cliente : Pessoa
     {
-        public Cliente(int id, string nome): base (id, nome) { }
+        //to-do: incluir o número do contrato
+        string numeroContrato;
+
+        public Cliente(int id, string nome) : base(id, nome) { }
     }
 
     class Movimentacao
@@ -138,10 +150,32 @@ namespace SJImobiliaria
         ArrayList imoveis = new ArrayList();
         ArrayList movimentacoes = new ArrayList();
 
-         public Imovel getImovelById(int id)
-        {            
+        public Imobiliaria(ArrayList clientes, ArrayList imoveis, ArrayList movimentacoes)
+        {
+            this.clientes = clientes;
+            this.imoveis = imoveis;
+            this.movimentacoes = movimentacoes;
+        }
+
+        public ArrayList getClientes()
+        {
+            return this.clientes;
+        }
+
+        public ArrayList getImoveis()
+        {
+            return this.imoveis;
+        }
+
+        public ArrayList getMovimentacoes()
+        {
+            return this.movimentacoes;
+        }
+
+        public Imovel getImovelById(int id)
+        {
             foreach (Imovel imovel in imoveis)
-            {                
+            {
                 if (imovel.getId() == id)
                 {
                     return imovel;
@@ -168,9 +202,10 @@ namespace SJImobiliaria
 
             foreach (Movimentacao movimentacao in movimentacoes)
             {
-                if (movimentacao.getId() == id)
+                if (movimentacao.getIdImovel() == id)
                 {
                     ultimaMovimentacao = movimentacao;
+
                 }
             }
 
@@ -239,7 +274,7 @@ namespace SJImobiliaria
         {
             string txtLido = "1";
             while (txtLido == "1")
-            {                
+            {
                 Console.WriteLine("Informe o nome do cliente");
                 string nome = Console.ReadLine();
                 int id = clientes.Count + 1;
@@ -261,22 +296,27 @@ namespace SJImobiliaria
 
         public void listarImoveis(String situacao = "")
         {
-            Console.WriteLine("Id | Descricao | Situacao");
+            //to-do: colocar para exibir os dados da casa e do apartamento que não estão sendo listados
+
+            Console.WriteLine("Id | Descricao | Situacao | Medida Area Externa | Andar");
 
             foreach (Imovel imovel in imoveis)
             {
-                if((imovel.getSituacao() == situacao) || (situacao == "")) { 
+                if ((imovel.getSituacao() == situacao) || (situacao == ""))
+                {
                     Console.WriteLine("-------------------------------------------");
                     Console.WriteLine("-------------------------------------------");
                     Console.WriteLine(imovel.getId().ToString() + " | " + imovel.getDescricao() + " | " + imovel.getSituacao());
                 }
             }
-       
+
         }
 
         public void listarClientes()
         {
-            Console.WriteLine("Id | Nome ");
+            //to-do: listar o número do contrato
+
+            Console.WriteLine("Id | Nome | Número Contrato");
 
             foreach (Cliente cliente in clientes)
             {
@@ -302,7 +342,7 @@ namespace SJImobiliaria
                 throw new EAbort("O imóvel não foi localizado!");
             }
 
-            if(imovel.getSituacao() != "Disponivel")
+            if (imovel.getSituacao() != "Disponivel")
             {
                 throw new EAbort("O imóvel não está disponível!");
             }
@@ -327,12 +367,12 @@ namespace SJImobiliaria
             Console.WriteLine("Locação realizada com sucesso!");
         }
 
-        public void finalizarLocacao()
+        public void finalizarEscritoresLocacao()
         {
             int idLido;
 
             Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("Digite o ID do imóvel que deseja finalizar a locação: ");
+            Console.WriteLine("Digite o ID do imóvel que deseja finalizarEscritores a locação: ");
             idLido = Convert.ToInt32(Console.ReadLine());
 
             Imovel imovel = this.getImovelById(idLido);
@@ -417,7 +457,7 @@ namespace SJImobiliaria
         {
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("-------------------------------------------");
-            Console.WriteLine("Digite 0 para cadastrar imóvel ");           
+            Console.WriteLine("Digite 0 para cadastrar imóvel ");
             Console.WriteLine("Digite 1 para cadastrar cliente ");
             Console.WriteLine("-------------------------------------------");
             Console.WriteLine("Digite 2 para listar todos os imóveis ");
@@ -427,7 +467,7 @@ namespace SJImobiliaria
             Console.WriteLine("Digite 6 para listar os clientes ");
             Console.WriteLine("------------------------------------------");
             Console.WriteLine("Digite 7 para locação.");
-            Console.WriteLine("Digite 8 para finalizar locação.");
+            Console.WriteLine("Digite 8 para finalizarEscritores locação.");
             Console.WriteLine("------------------------------------------");
             Console.WriteLine("Digite 9 para vendas.");
             Console.WriteLine("------------------------------------------");
@@ -445,9 +485,9 @@ namespace SJImobiliaria
 
         static void Main(string[] args)
         {
-            lerOpcaoMenuPrincipal();
+            Imobiliaria imobiliaria = Repositorio.getImobiliaria();
 
-            Imobiliaria imobiliaria = new Imobiliaria();
+            lerOpcaoMenuPrincipal();
 
             while (txtLido != "")
             {
@@ -456,10 +496,12 @@ namespace SJImobiliaria
                     if (txtLido == "0")
                     {
                         imobiliaria.cadastrarImovel();
+                        Repositorio.salvarImobiliaria(imobiliaria);
                     }
                     else if (txtLido == "1")
                     {
                         imobiliaria.cadastrarCliente();
+                        Repositorio.salvarImobiliaria(imobiliaria);
                     }
                     else if (txtLido == "2")
                     {
@@ -489,15 +531,20 @@ namespace SJImobiliaria
                     else if (txtLido == "7")
                     {
                         imobiliaria.alugarImovel();
+                        Repositorio.salvarImobiliaria(imobiliaria);
                         retornarMenuPrincipal();
                     }
                     else if (txtLido == "8")
                     {
-                        imobiliaria.finalizarLocacao();
+                        imobiliaria.finalizarEscritoresLocacao();
+                        Repositorio.salvarImobiliaria(imobiliaria);
+                        retornarMenuPrincipal();
                     }
                     else if (txtLido == "9")
                     {
                         imobiliaria.venderImovel();
+                        Repositorio.salvarImobiliaria(imobiliaria);
+                        retornarMenuPrincipal();
                     }
                     else
                     {
@@ -506,10 +553,11 @@ namespace SJImobiliaria
                 }
                 catch (Exception erro)
                 {
-                    if(erro is EAbort)
+                    if (erro is EAbort)
                     {
                         Console.WriteLine("Operação abortada. Descrição: " + erro.Message);
-                    } else
+                    }
+                    else
                     {
                         Console.WriteLine("Ocorreu um erro inesperado. Descrição: " + erro.Message);
                     }
