@@ -43,7 +43,7 @@ namespace SJImobiliaria
             return null;
         }
 
-        public Cliente getClienteById(int id)
+        public Cliente getClienteId(int id)
         {
             foreach (Cliente cliente in clientes)
             {
@@ -55,16 +55,7 @@ namespace SJImobiliaria
             return null;
         }
 
-        public int getClienteByNumContrato(int numContrato)
-        {
-            if (numContrato != 0)
-            {
-                return numContrato + 1;
-            }
-            return 1;
-        }
-
-        public Movimentacao getUltimaMovimentacaoByImovel(int id)
+        public Movimentacao getUltimaMovimentacaoImovel(int id)
         {
             int idUltimaMovimentacao = 0;
             Movimentacao ultimaMovimentacao = null;
@@ -127,6 +118,8 @@ namespace SJImobiliaria
                     imoveis.Add(imovel);
                 }
 
+                Repositorio.salvarImobiliaria(this);
+
                 Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para encerrar o cadastro");
                 txtLido = Console.ReadLine();
 
@@ -151,6 +144,8 @@ namespace SJImobiliaria
 
                 clientes.Add(cliente);
 
+                Repositorio.salvarImobiliaria(this);
+
                 Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para ecerrar o cadastro");
                 txtLido = Console.ReadLine();
 
@@ -170,12 +165,11 @@ namespace SJImobiliaria
 
             foreach (Imovel imovel in imoveis)
             {
-                if ((imovel.getSituacao() == situacao) || (situacao == ""))
+               if ((imovel.getSituacao() == situacao) || (situacao == ""))
                 {
                     if (imovel is Casa)
                     {
                         Casa casa = imovel as Casa;
-                        Console.WriteLine("-------------------------------------------");
                         Console.WriteLine("-------------------------------------------");
                         Console.WriteLine(casa.getId().ToString() + " | " + casa.getDescricao() + " | " + casa.getSituacao() + " | " +  casa.getMedidaAreaExterna() + " | " + "" + " | ");
                     }
@@ -183,12 +177,49 @@ namespace SJImobiliaria
                     {
                         Apartamento apartamento = imovel as Apartamento;
                         Console.WriteLine("-------------------------------------------");
-                        Console.WriteLine("-------------------------------------------");
                         Console.WriteLine(apartamento.getId().ToString() + " | " + apartamento.getDescricao() + " | " + apartamento.getSituacao() + " | " + "" + " | " + apartamento.getAndar() + " | ");
                     }
-                }
+               }
+            }
+        }
+
+        public void listarMoviemtacoesImovel()
+        {
+            int idImovel = 0;
+            string txtLido = "";
+            Imovel imovel = null;
+
+            Console.WriteLine("Informe o id do imóvel que deseja listar as movimentações");
+            txtLido = Console.ReadLine();
+
+            if (txtLido != "")
+            {
+                idImovel = Convert.ToInt32(txtLido);
             }
 
+            if(idImovel > 0)
+            {
+                imovel = this.getImovelById(idImovel);
+            }
+
+            if(imovel == null)
+            {
+                Console.WriteLine("Id do imóvel é inválido ou não foi localizado.");
+                return;
+            }
+
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Id | idImovel | idCliente | Situacao ");
+
+            foreach (Movimentacao movimentacao in movimentacoes)
+            {
+                if (movimentacao.getIdImovel() == idImovel)
+                {                    
+                    Console.WriteLine("-------------------------------------------");
+                    Console.WriteLine(movimentacao.getId().ToString() + " | " + movimentacao.getIdImovel().ToString() + " | " +
+                        movimentacao.getIdCliente().ToString() + " | " + movimentacao.getSituacao() + " | ");
+                }
+            }
         }
 
         public void listarClientes()
@@ -198,7 +229,6 @@ namespace SJImobiliaria
 
             foreach (Cliente cliente in clientes)
             {
-                Console.WriteLine("-------------------------------------------");
                 Console.WriteLine("-------------------------------------------");
                 Console.WriteLine(cliente.getId().ToString() + " | " + cliente.getNome() + " | " + cliente.getNumeroContrato());
             }
@@ -229,19 +259,26 @@ namespace SJImobiliaria
             Console.WriteLine("Digite o ID do cliente que está locando este imóvel: ");
             idLido = Convert.ToInt32(Console.ReadLine());
 
-            Cliente cliente = this.getClienteById(idLido);
+            Cliente cliente = this.getClienteId(idLido);
 
             if (cliente == null)
             {
                 throw new EAbort("O clientel não foi localizado!");
             }
 
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Digite o número do contrato de locação do imóvel: ");
+            string numeroContrato = Console.ReadLine();
+
             Movimentacao movimentacao = new Movimentacao(this.movimentacoes.Count + 1, imovel.getId(), cliente.getId(), "Aluguel");
 
             this.movimentacoes.Add(movimentacao);
 
             imovel.setSituacao("Alugado");
-            cliente.setNumeroContrato(getClienteByNumContrato(0));
+            cliente.setNumeroContrato(numeroContrato);
+
+            Repositorio.salvarImobiliaria(this);
+
             Console.WriteLine("Locação realizada com sucesso!");
         }
 
@@ -265,7 +302,7 @@ namespace SJImobiliaria
                 throw new EAbort("O imóvel não está alugado!");
             }
 
-            Movimentacao ultimaMovimentacao = this.getUltimaMovimentacaoByImovel(imovel.getId());
+            Movimentacao ultimaMovimentacao = this.getUltimaMovimentacaoImovel(imovel.getId());
 
             if (ultimaMovimentacao == null)
             {
@@ -277,11 +314,21 @@ namespace SJImobiliaria
                 throw new EAbort("A última movimentação do imóvel não foi de locação.");
             }
 
+            Cliente cliente = this.getClienteId(ultimaMovimentacao.getIdCliente());
+
+            if(cliente == null)
+            {
+                throw new EAbort("O cliente da locação é inválido ou não foi localizado.");
+            }
+
             Movimentacao movimentacao = new Movimentacao(this.movimentacoes.Count + 1, imovel.getId(), ultimaMovimentacao.getIdCliente(), "Finalização da locação");
             
             this.movimentacoes.Add(movimentacao);
 
             imovel.setSituacao("Disponivel");
+            cliente.setNumeroContrato("");
+
+            Repositorio.salvarImobiliaria(this);
 
             Console.WriteLine("Finalização da locação realizada com sucesso!");
         }
@@ -310,7 +357,7 @@ namespace SJImobiliaria
             Console.WriteLine("Digite o ID do cliente que está comprando este imóvel: ");
             idLido = Convert.ToInt32(Console.ReadLine());
 
-            Cliente cliente = this.getClienteById(idLido);
+            Cliente cliente = this.getClienteId(idLido);
 
             if (cliente == null)
             {
@@ -322,6 +369,8 @@ namespace SJImobiliaria
             this.movimentacoes.Add(movimentacao);
 
             imovel.setSituacao("Vendido");
+
+            Repositorio.salvarImobiliaria(this);
 
             Console.WriteLine("Venda realizada com sucesso!");
         }

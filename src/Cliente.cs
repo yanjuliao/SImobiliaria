@@ -4,18 +4,19 @@ namespace SJImobiliaria
 {
     class Cliente : Pessoa
     {
-        //to-do: incluir o número do contrato
-        int numeroContrato;
+        string numeroContrato;
 
-        public Cliente(int id, string nome) : base(id, nome) 
-        {   
-        }
-
-        public void setNumeroContrato(int numeroContrato)
+        public Cliente(int id, string nome, string numeroContrato = "") : base(id, nome) 
         {
             this.numeroContrato = numeroContrato;
         }
-        public int getNumeroContrato()
+
+        public void setNumeroContrato(string numeroContrato)
+        {
+            this.numeroContrato = numeroContrato;
+        }
+
+        public string getNumeroContrato()
         {
             return this.numeroContrato;
         }

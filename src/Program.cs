@@ -6,11 +6,10 @@ namespace SJImobiliaria
     class Program
     {        
         static void Main(string[] args)
-        {
+        {            
             Imobiliaria imobiliaria = Repositorio.getImobiliaria();
 
-            MenuPrincipal.lerOpcaoMenuPrincipal();
-
+            MenuPrincipal.lerOpcao();
             while (MenuPrincipal.txtLido != "")
             {
                 try
@@ -18,55 +17,55 @@ namespace SJImobiliaria
                     if (MenuPrincipal.txtLido == "0")
                     {
                         imobiliaria.cadastrarImovel();
-                        Repositorio.salvarImobiliaria(imobiliaria);
                     }
                     else if (MenuPrincipal.txtLido == "1")
                     {
-                        imobiliaria.cadastrarCliente();
-                        Repositorio.salvarImobiliaria(imobiliaria);
+                        imobiliaria.cadastrarCliente();                        
                     }
                     else if (MenuPrincipal.txtLido == "2")
                     {
                         imobiliaria.listarImoveis();
-                        MenuPrincipal.retornarMenuPrincipal();
+                        MenuPrincipal.retornar();
                     }
                     else if (MenuPrincipal.txtLido == "3")
                     {
                         imobiliaria.listarImoveis("Disponivel");
-                        MenuPrincipal.retornarMenuPrincipal();
+                        MenuPrincipal.retornar();
                     }
                     else if (MenuPrincipal.txtLido == "4")
                     {
                         imobiliaria.listarImoveis("Alugado");
-                        MenuPrincipal.retornarMenuPrincipal();
+                        MenuPrincipal.retornar();
                     }
                     else if (MenuPrincipal.txtLido == "5")
                     {
                         imobiliaria.listarImoveis("Vendido");
-                        MenuPrincipal.retornarMenuPrincipal();
+                        MenuPrincipal.retornar();
                     }
                     else if (MenuPrincipal.txtLido == "6")
                     {
-                        imobiliaria.listarClientes();
-                        MenuPrincipal.retornarMenuPrincipal();
+                        imobiliaria.listarMoviemtacoesImovel();
+                        MenuPrincipal.retornar();
                     }
                     else if (MenuPrincipal.txtLido == "7")
                     {
-                        imobiliaria.alugarImovel();
-                        Repositorio.salvarImobiliaria(imobiliaria);
-                        MenuPrincipal.retornarMenuPrincipal();
+                        imobiliaria.listarClientes();
+                        MenuPrincipal.retornar();
                     }
                     else if (MenuPrincipal.txtLido == "8")
                     {
-                        imobiliaria.finalizarLocacao();
-                        Repositorio.salvarImobiliaria(imobiliaria);
-                        MenuPrincipal.retornarMenuPrincipal();
+                        imobiliaria.alugarImovel();                        
+                        MenuPrincipal.retornar();
                     }
                     else if (MenuPrincipal.txtLido == "9")
                     {
+                        imobiliaria.finalizarLocacao();                        
+                        MenuPrincipal.retornar();
+                    }
+                    else if (MenuPrincipal.txtLido == "10")
+                    {
                         imobiliaria.venderImovel();
-                        Repositorio.salvarImobiliaria(imobiliaria);
-                        MenuPrincipal.retornarMenuPrincipal();
+                        MenuPrincipal.retornar();
                     }
                     else
                     {
@@ -85,7 +84,7 @@ namespace SJImobiliaria
                     }
                 }
 
-                MenuPrincipal.lerOpcaoMenuPrincipal();
+                MenuPrincipal.lerOpcao();
             }
         }
     }

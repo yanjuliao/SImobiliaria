@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace SJImobiliaria
 {
-    class Repositorio
+    class  Repositorio
     {
         private static StreamWriter escritorClientes;
         private static StreamWriter escritorImoveis;
@@ -90,16 +90,15 @@ namespace SJImobiliaria
             }
 
             int id = Repositorio.lerValorCampoInt(registro, "id");
-            int numeroContrato = Repositorio.lerValorCampoInt(registro, "numContrato", false);
             string nome = Repositorio.lerValorCampoStr(registro, "nome");
+            string numeroContrato = Repositorio.lerValorCampoStr(registro, "numeroContrato");
 
             if (id <= 0)
             {
                 return null;
             }
 
-            Cliente cliente = new Cliente(id, nome);
-            cliente.setNumeroContrato(numeroContrato);
+            Cliente cliente = new Cliente(id, nome, numeroContrato);           
             return cliente;
         }
 
@@ -159,7 +158,7 @@ namespace SJImobiliaria
         {
             ArrayList movimentacoes = new ArrayList();
 
-            while (Repositorio.leitorImoveis.Peek() >= 0)
+            while (Repositorio.leitorMovimentacoes.Peek() >= 0)
             {
                 string registro = Repositorio.leitorMovimentacoes.ReadLine();
                 Movimentacao movimentacao = Repositorio.getMovimentacao(registro);
@@ -242,6 +241,12 @@ namespace SJImobiliaria
 
                     int posIniValor = subStr.IndexOf("=") + 1;
                     int posFimValor = subStr.IndexOf("|");
+
+                    if ((posIniValor < 0) || (posFimValor < 0))
+                    {
+                        throw new Exception("O formato do registro é inválido. Verifique se o identificadores \"=\" e \"|\" estão presentes.");
+                    }
+
                     qtdCaracteres = posFimValor - posIniValor;
                     valor = subStr.Substring(posIniValor, qtdCaracteres);
                     //valor -> Alugado
@@ -259,10 +264,16 @@ namespace SJImobiliaria
             }
 
             Repositorio.inicializarEscritores();
-            Repositorio.salvarClientes(imobiliaria.getClientes());
-            Repositorio.salvarImoveis(imobiliaria.getImoveis());
-            Repositorio.salvarMovimentacoes(imobiliaria.getMovimentacoes());
-            Repositorio.finalizarEscritores();
+            try 
+            {
+                Repositorio.salvarClientes(imobiliaria.getClientes());
+                Repositorio.salvarImoveis(imobiliaria.getImoveis());
+                Repositorio.salvarMovimentacoes(imobiliaria.getMovimentacoes());
+            }
+            finally
+            {
+                Repositorio.finalizarEscritores();
+            }
         }
 
         private static void salvarClientes(ArrayList clientes)
