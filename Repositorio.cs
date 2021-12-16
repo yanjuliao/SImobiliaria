@@ -84,6 +84,7 @@ namespace SJImobiliaria
             }
 
             int id = Repositorio.lerValorCampoInt(registro, "id");
+            int numeroContrato = Repositorio.lerValorCampoInt(registro, "numContrato", false);
             string nome = Repositorio.lerValorCampoStr(registro, "nome");
 
             if (id <= 0)
@@ -92,7 +93,7 @@ namespace SJImobiliaria
             }
 
             Cliente cliente = new Cliente(id, nome);
-
+            cliente.setNumeroContrato(numeroContrato);
             return cliente;
         }
 
@@ -273,7 +274,8 @@ namespace SJImobiliaria
         {
             string registro =
                 "id=" + cliente.getId().ToString() + "|" +
-                "nome=" + cliente.getNome() + "|";
+                "nome=" + cliente.getNome() + "|" +
+                "numeroContrato=" + cliente.getNumeroContrato().ToString() + "|";
 
             Repositorio.escritorClientes.WriteLine(registro);
         }

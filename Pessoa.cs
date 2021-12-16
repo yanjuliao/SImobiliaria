@@ -1,24 +1,26 @@
 ﻿using System;
 
-namespace 
-class Pessoa
+namespace SJImobiliaria
 {
-    int id;
-    string nome;
-
-    public Pessoa(int id, string nome)
+    class Pessoa
     {
-        this.id = id;
-        this.nome = nome;
-    }
+        int id;
+        string nome;
 
-    public int getId()
-    {
-        return this.id;
-    }
+        public Pessoa(int id, string nome)
+        {
+            this.id = id;
+            this.nome = nome;
+        }
 
-    public string getNome()
-    {
-        return this.nome;
+        public int getId()
+        {
+            return this.id;
+        }
+
+        public string getNome()
+        {
+            return this.nome;
+        }
     }
 }

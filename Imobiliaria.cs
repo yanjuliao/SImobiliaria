@@ -1,306 +1,320 @@
 ﻿using System;
+using System.Collections;
 
-class Imobiliaria
+namespace SJImobiliaria
 {
-    ArrayList clientes = new ArrayList();
-    ArrayList imoveis = new ArrayList();
-    ArrayList movimentacoes = new ArrayList();
-
-    public Imobiliaria(ArrayList clientes, ArrayList imoveis, ArrayList movimentacoes)
+    class Imobiliaria
     {
-        this.clientes = clientes;
-        this.imoveis = imoveis;
-        this.movimentacoes = movimentacoes;
-    }
+        ArrayList clientes = new ArrayList();
+        ArrayList imoveis = new ArrayList();
+        ArrayList movimentacoes = new ArrayList();
 
-    public ArrayList getClientes()
-    {
-        return this.clientes;
-    }
-
-    public ArrayList getImoveis()
-    {
-        return this.imoveis;
-    }
-
-    public ArrayList getMovimentacoes()
-    {
-        return this.movimentacoes;
-    }
-
-    public Imovel getImovelById(int id)
-    {
-        foreach (Imovel imovel in imoveis)
+        public Imobiliaria(ArrayList clientes, ArrayList imoveis, ArrayList movimentacoes)
         {
-            if (imovel.getId() == id)
-            {
-                return imovel;
-            }
-        }
-        return null;
-    }
-
-    public Cliente getClienteById(int id)
-    {
-        foreach (Cliente cliente in clientes)
-        {
-            if (cliente.getId() == id)
-            {
-                return cliente;
-            }
-        }
-        return null;
-    }
-
-    public Movimentacao getUltimaMovimentacaoByImovel(int id)
-    {
-        Movimentacao ultimaMovimentacao = null;
-
-        foreach (Movimentacao movimentacao in movimentacoes)
-        {
-            if (movimentacao.getIdImovel() == id)
-            {
-                ultimaMovimentacao = movimentacao;
-
-            }
+            this.clientes = clientes;
+            this.imoveis = imoveis;
+            this.movimentacoes = movimentacoes;
         }
 
-        return ultimaMovimentacao;
-    }
-
-    public void cadastrarImovel()
-    {
-        string txtLido = "1";
-        while (txtLido == "1")
+        public ArrayList getClientes()
         {
-            Console.WriteLine("Digite 1 para casa ou pressione ou 2 para apartamento.");
-            txtLido = Console.ReadLine();
+            return this.clientes;
+        }
 
-            while (txtLido != "1" && txtLido != "2")
+        public ArrayList getImoveis()
+        {
+            return this.imoveis;
+        }
+
+        public ArrayList getMovimentacoes()
+        {
+            return this.movimentacoes;
+        }
+
+        public Imovel getImovelById(int id)
+        {
+            foreach (Imovel imovel in imoveis)
             {
-                Console.WriteLine("Ops... parece que você digitou outro valor, tente novamente!!!!");
+                if (imovel.getId() == id)
+                {
+                    return imovel;
+                }
+            }
+            return null;
+        }
+
+        public Cliente getClienteById(int id)
+        {
+            foreach (Cliente cliente in clientes)
+            {
+                if (cliente.getId() == id)
+                {
+                    return cliente;
+                }
+            }
+            return null;
+        }
+
+        public int getClienteByNumContrato(int numContrato)
+        {
+            if (numContrato != 0)
+            {
+                return numContrato + 1;
+            }
+            return 1;
+        }
+
+        public Movimentacao getUltimaMovimentacaoByImovel(int id)
+        {
+            int idUltimaMovimentacao = 0;
+            Movimentacao ultimaMovimentacao = null;
+
+            foreach (Movimentacao movimentacao in movimentacoes)
+            {
+                if ((movimentacao.getIdImovel() == id) && (movimentacao.getId() > idUltimaMovimentacao))
+                {
+                    idUltimaMovimentacao = movimentacao.getId();
+                    ultimaMovimentacao = movimentacao;
+                }
+            }
+
+            return ultimaMovimentacao;
+        }
+
+        public void cadastrarImovel()
+        {
+            string txtLido = "1";
+            while (txtLido == "1")
+            {
                 Console.WriteLine("Digite 1 para casa ou pressione ou 2 para apartamento.");
                 txtLido = Console.ReadLine();
-            }
 
-            if (txtLido == "1")
-            {
-                Console.WriteLine("Informe a descrição da casa, Ex: Casa, 3 quartos.");
-                string descricao = Console.ReadLine();
+                while (txtLido != "1" && txtLido != "2")
+                {
+                    Console.WriteLine("Ops... parece que você digitou outro valor, tente novamente!!!!");
+                    Console.WriteLine("Digite 1 para casa ou pressione ou 2 para apartamento.");
+                    txtLido = Console.ReadLine();
+                }
 
-                Console.WriteLine("Informe a metragem da área externa em m².");
-                double medidaAreaExterna = Convert.ToDouble(Console.ReadLine());
+                if (txtLido == "1")
+                {
+                    Console.WriteLine("Informe a descrição da casa, Ex: Casa, 3 quartos.");
+                    string descricao = Console.ReadLine();
 
-                string situacao = "Disponivel";
-                int id = imoveis.Count + 1;
+                    Console.WriteLine("Informe a metragem da área externa em m².");
+                    double medidaAreaExterna = Convert.ToDouble(Console.ReadLine());
 
-                Casa imovel = new Casa(id, descricao, situacao, medidaAreaExterna);
+                    string situacao = "Disponivel";
+                    int id = imoveis.Count + 1;
 
-                imoveis.Add(imovel);
-            }
-            else if (txtLido == "2")
-            {
-                Console.WriteLine("Informe a descrição do apartamento, Ex: Apartamento, 3 quartos.");
-                string descricao = Console.ReadLine();
+                    Casa imovel = new Casa(id, descricao, situacao, medidaAreaExterna);
 
-                Console.WriteLine("Informe o andar do apartamento.");
-                int andar = Convert.ToInt32(Console.ReadLine());
+                    imoveis.Add(imovel);
+                }
+                else if (txtLido == "2")
+                {
+                    Console.WriteLine("Informe a descrição do apartamento, Ex: Apartamento, 3 quartos.");
+                    string descricao = Console.ReadLine();
 
-                string situacao = "Disponivel";
-                int id = imoveis.Count + 1;
+                    Console.WriteLine("Informe o andar do apartamento.");
+                    int andar = Convert.ToInt32(Console.ReadLine());
 
-                Apartamento imovel = new Apartamento(id, descricao, situacao, andar);
+                    string situacao = "Disponivel";
+                    int id = imoveis.Count + 1;
 
-                imoveis.Add(imovel);
-            }
+                    Apartamento imovel = new Apartamento(id, descricao, situacao, andar);
 
-            Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para ecerrar o cadasrto");
-            txtLido = Console.ReadLine();
+                    imoveis.Add(imovel);
+                }
 
-            while (txtLido != "1" && txtLido != "0")
-            {
-                Console.WriteLine("Ops... parece que você digitou outro valor, tente novamente!!!!");
                 Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para ecerrar o cadasrto");
                 txtLido = Console.ReadLine();
+
+                while (txtLido != "1" && txtLido != "0")
+                {
+                    Console.WriteLine("Ops... parece que você digitou outro valor, tente novamente!!!!");
+                    Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para ecerrar o cadasrto");
+                    txtLido = Console.ReadLine();
+                }
             }
         }
-    }
 
-    public void cadastrarCliente()
-    {
-        string txtLido = "1";
-        while (txtLido == "1")
+        public void cadastrarCliente()
         {
-            Console.WriteLine("Informe o nome do cliente");
-            string nome = Console.ReadLine();
-            int id = clientes.Count + 1;
-            Cliente cliente = new Cliente(id, nome);
-
-            clientes.Add(cliente);
-
-            Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para ecerrar o cadastro");
-            txtLido = Console.ReadLine();
-
-            while (txtLido != "1" && txtLido != "0")
+            string txtLido = "1";
+            while (txtLido == "1")
             {
-                Console.WriteLine("Ops... parece que você digitou outro valor, tente novamente!!!!");
-                Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para ecerrar o cadasrto");
+                Console.WriteLine("Informe o nome do cliente");
+                string nome = Console.ReadLine();
+                int id = clientes.Count + 1;
+                Cliente cliente = new Cliente(id, nome);
+
+                clientes.Add(cliente);
+
+                Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para ecerrar o cadastro");
                 txtLido = Console.ReadLine();
+
+                while (txtLido != "1" && txtLido != "0")
+                {
+                    Console.WriteLine("Ops... parece que você digitou outro valor, tente novamente!!!!");
+                    Console.WriteLine("Digite 1 para continuar o cadastro ou 0 para ecerrar o cadasrto");
+                    txtLido = Console.ReadLine();
+                }
             }
         }
-    }
 
-    public void listarImoveis(String situacao = "")
-    {
-        //to-do: colocar para exibir os dados da casa e do apartamento que não estão sendo listados
-
-        Console.WriteLine("Id | Descricao | Situacao | Medida Area Externa | Andar");
-
-        foreach (Imovel imovel in imoveis)
+        public void listarImoveis(String situacao = "")
         {
-            if ((imovel.getSituacao() == situacao) || (situacao == ""))
+            //to-do: colocar para exibir os dados da casa e do apartamento que não estão sendo listados
+
+            Console.WriteLine("Id | Descricao | Situacao | Medida Area Externa | Andar");
+
+            foreach (Imovel imovel in imoveis)
+            {
+                if ((imovel.getSituacao() == situacao) || (situacao == ""))
+                {
+                    Console.WriteLine("-------------------------------------------");
+                    Console.WriteLine("-------------------------------------------");
+                    Console.WriteLine(imovel.getId().ToString() + " | " + imovel.getDescricao() + " | " + imovel.getSituacao());
+                }
+            }
+
+        }
+
+        public void listarClientes()
+        {
+            //to-do: listar o número do contrato
+
+            Console.WriteLine("Id | Nome | Número Contrato");
+
+            foreach (Cliente cliente in clientes)
             {
                 Console.WriteLine("-------------------------------------------");
                 Console.WriteLine("-------------------------------------------");
-                Console.WriteLine(imovel.getId().ToString() + " | " + imovel.getDescricao() + " | " + imovel.getSituacao());
+                Console.WriteLine(cliente.getId().ToString() + " | " + cliente.getNome() + "|" + cliente.getNumeroContrato());
             }
+
         }
 
-    }
-
-    public void listarClientes()
-    {
-        //to-do: listar o número do contrato
-
-        Console.WriteLine("Id | Nome | Número Contrato");
-
-        foreach (Cliente cliente in clientes)
+        public void alugarImovel()
         {
+            int idLido;
+
             Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Digite o ID do imóvel que deseja locar: ");
+            idLido = Convert.ToInt32(Console.ReadLine());
+
+            Imovel imovel = this.getImovelById(idLido);
+
+            if (imovel == null)
+            {
+                throw new EAbort("O imóvel não foi localizado!");
+            }
+
+            if (imovel.getSituacao() != "Disponivel")
+            {
+                throw new EAbort("O imóvel não está disponível!");
+            }
+
             Console.WriteLine("-------------------------------------------");
-            Console.WriteLine(cliente.getId().ToString() + " | " + cliente.getNome());
+            Console.WriteLine("Digite o ID do cliente que está locando este imóvel: ");
+            idLido = Convert.ToInt32(Console.ReadLine());
+
+            Cliente cliente = this.getClienteById(idLido);
+
+            if (cliente == null)
+            {
+                throw new EAbort("O clientel não foi localizado!");
+            }
+
+            Movimentacao movimentacao = new Movimentacao(this.movimentacoes.Count + 1, imovel.getId(), cliente.getId(), "Aluguel");
+
+            this.movimentacoes.Add(movimentacao);
+
+            imovel.setSituacao("Alugado");
+            cliente.setNumeroContrato(getClienteByNumContrato(1));
+            Console.WriteLine("Locação realizada com sucesso!");
         }
 
-    }
-
-    public void alugarImovel()
-    {
-        int idLido;
-
-        Console.WriteLine("-------------------------------------------");
-        Console.WriteLine("Digite o ID do imóvel que deseja locar: ");
-        idLido = Convert.ToInt32(Console.ReadLine());
-
-        Imovel imovel = this.getImovelById(idLido);
-
-        if (imovel == null)
+        public void finalizarLocacao()
         {
-            throw new EAbort("O imóvel não foi localizado!");
+            int idLido;
+
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Digite o ID do imóvel que deseja finalizar a locação: ");
+            idLido = Convert.ToInt32(Console.ReadLine());
+
+            Imovel imovel = this.getImovelById(idLido);
+
+            if (imovel == null)
+            {
+                throw new EAbort("O imóvel não foi localizado!");
+            }
+
+            if (imovel.getSituacao() != "Alugado")
+            {
+                throw new EAbort("O imóvel não está alugado!");
+            }
+
+            Movimentacao ultimaMovimentacao = this.getUltimaMovimentacaoByImovel(imovel.getId());
+
+            if (ultimaMovimentacao == null)
+            {
+                throw new EAbort("A movimentação do imóvel não foi localizada!");
+            }
+
+            if (ultimaMovimentacao.getSituacao() != "Aluguel")
+            {
+                throw new EAbort("A última movimentação do imóvel não foi de locação.");
+            }
+
+            Movimentacao movimentacao = new Movimentacao(this.movimentacoes.Count + 1, imovel.getId(), ultimaMovimentacao.getIdCliente(), "Finalização da locação");
+            
+            this.movimentacoes.Add(movimentacao);
+
+            imovel.setSituacao("Disponivel");
+
+            Console.WriteLine("Finalização da locação realizada com sucesso!");
         }
 
-        if (imovel.getSituacao() != "Disponivel")
+        public void venderImovel()
         {
-            throw new EAbort("O imóvel não está disponível!");
+            int idLido;
+
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Digite o ID do imóvel que deseja vender: ");
+            idLido = Convert.ToInt32(Console.ReadLine());
+
+            Imovel imovel = this.getImovelById(idLido);
+
+            if (imovel == null)
+            {
+                throw new EAbort("O imóvel não foi localizado!");
+            }
+
+            if (imovel.getSituacao() != "Disponivel")
+            {
+                throw new EAbort("O imóvel não está disponível!");
+            }
+
+            Console.WriteLine("-------------------------------------------");
+            Console.WriteLine("Digite o ID do cliente que está comprando este imóvel: ");
+            idLido = Convert.ToInt32(Console.ReadLine());
+
+            Cliente cliente = this.getClienteById(idLido);
+
+            if (cliente == null)
+            {
+                throw new EAbort("O clientel não foi localizado!");
+            }
+
+            Movimentacao movimentacao = new Movimentacao(this.movimentacoes.Count + 1, imovel.getId(), cliente.getId(), "Venda");
+
+            this.movimentacoes.Add(movimentacao);
+
+            imovel.setSituacao("Vendido");
+
+            Console.WriteLine("Venda realizada com sucesso!");
         }
-
-        Console.WriteLine("-------------------------------------------");
-        Console.WriteLine("Digite o ID do cliente que está locando este imóvel: ");
-        idLido = Convert.ToInt32(Console.ReadLine());
-
-        Cliente cliente = this.getClienteById(idLido);
-
-        if (cliente == null)
-        {
-            throw new EAbort("O clientel não foi localizado!");
-        }
-
-        Movimentacao movimentacao = new Movimentacao(this.movimentacoes.Count + 1, imovel.getId(), cliente.getId(), "Aluguel");
-
-        this.movimentacoes.Add(movimentacao);
-
-        imovel.setSituacao("Alugado");
-
-        Console.WriteLine("Locação realizada com sucesso!");
-    }
-
-    public void finalizarEscritoresLocacao()
-    {
-        int idLido;
-
-        Console.WriteLine("-------------------------------------------");
-        Console.WriteLine("Digite o ID do imóvel que deseja finalizarEscritores a locação: ");
-        idLido = Convert.ToInt32(Console.ReadLine());
-
-        Imovel imovel = this.getImovelById(idLido);
-
-        if (imovel == null)
-        {
-            throw new EAbort("O imóvel não foi localizado!");
-        }
-
-        if (imovel.getSituacao() != "Alugado")
-        {
-            throw new EAbort("O imóvel não está alugado!");
-        }
-
-        Movimentacao ultimaMovimentacao = this.getUltimaMovimentacaoByImovel(imovel.getId());
-
-        if (ultimaMovimentacao == null)
-        {
-            throw new EAbort("A movimentação do imóvel não foi localizada!");
-        }
-
-        if (ultimaMovimentacao.getSituacao() != "Aluguel")
-        {
-            throw new EAbort("A última movimentação do imóvel não foi de locação.");
-        }
-
-        Movimentacao movimentacao = new Movimentacao(this.movimentacoes.Count + 1, imovel.getId(), ultimaMovimentacao.getIdCliente(), "Finalização da locação");
-
-        this.movimentacoes.Add(movimentacao);
-
-        imovel.setSituacao("Disponivel");
-
-        Console.WriteLine("Finalização da locação realizada com sucesso!");
-    }
-
-    public void venderImovel()
-    {
-        int idLido;
-
-        Console.WriteLine("-------------------------------------------");
-        Console.WriteLine("Digite o ID do imóvel que deseja vender: ");
-        idLido = Convert.ToInt32(Console.ReadLine());
-
-        Imovel imovel = this.getImovelById(idLido);
-
-        if (imovel == null)
-        {
-            throw new EAbort("O imóvel não foi localizado!");
-        }
-
-        if (imovel.getSituacao() != "Disponivel")
-        {
-            throw new EAbort("O imóvel não está disponível!");
-        }
-
-        Console.WriteLine("-------------------------------------------");
-        Console.WriteLine("Digite o ID do cliente que está comprando este imóvel: ");
-        idLido = Convert.ToInt32(Console.ReadLine());
-
-        Cliente cliente = this.getClienteById(idLido);
-
-        if (cliente == null)
-        {
-            throw new EAbort("O clientel não foi localizado!");
-        }
-
-        Movimentacao movimentacao = new Movimentacao(this.movimentacoes.Count + 1, imovel.getId(), cliente.getId(), "Venda");
-
-        this.movimentacoes.Add(movimentacao);
-
-        imovel.setSituacao("Vendido");
-
-        Console.WriteLine("Venda realizada com sucesso!");
     }
 }

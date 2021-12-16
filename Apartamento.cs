@@ -1,15 +1,19 @@
 ﻿using System;
 
-class Apartamento : Imovel
+namespace SJImobiliaria
 {
-    int andar;
-
-    public Apartamento(int id, string descricao, string situacao, int andar) : base(id, descricao, situacao)
+    class Apartamento : Imovel
     {
-        this.andar = andar;
-    }
+        int andar;
 
-    public int getAndar()
-    {
-        return this.andar;
+        public Apartamento(int id, string descricao, string situacao, int andar) : base(id, descricao, situacao)
+        {
+            this.andar = andar;
+        }
+
+        public int getAndar()
+        {
+            return this.andar;
+        }
     }
+}

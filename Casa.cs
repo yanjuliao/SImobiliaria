@@ -1,16 +1,19 @@
 ﻿using System;
 
-class Casa : Imovel
+namespace SJImobiliaria
 {
-    double medidaAreaExterna;
-
-    public Casa(int id, string descricao, string situacao, double medidaAreaExterna) : base(id, descricao, situacao)
+    class Casa : Imovel
     {
-        this.medidaAreaExterna = medidaAreaExterna;
-    }
+        double medidaAreaExterna;
 
-    public double getMedidaAreaExterna()
-    {
-        return this.medidaAreaExterna;
+        public Casa(int id, string descricao, string situacao, double medidaAreaExterna) : base(id, descricao, situacao)
+        {
+            this.medidaAreaExterna = medidaAreaExterna;
+        }
+
+        public double getMedidaAreaExterna()
+        {
+            return this.medidaAreaExterna;
+        }
     }
 }
